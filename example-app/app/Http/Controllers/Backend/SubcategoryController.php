@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\str;
-use  App\Models\Backend\Category;
+use App\Models\Backend\Category;
 use App\Models\Backend\Subcategory;
 use Image;
 use File;
@@ -18,7 +18,9 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcat=Subcategory::all();
+        return view("backend.pages.subcategory.managesubcategory", compact('subcat'));
+
     }
 
     /**
@@ -40,29 +42,30 @@ class SubcategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->all();
+       // return $request->all();
         $request->validate([
             'catId' => 'required',
+            //'slug' => 'required',
             'subCatName' => 'required',
             'description' => 'required',
             'status' => 'required'
         ]);
 
-        if($request->image){
-            $image=$request->file("image");
-            $imgCustomName=time().'.'.$image->getClientOrginalExtension();
-            $location=public_path('backend/subcategoryimages/'.$imgCustomName);
-            image::make($imgCustomName)->save($location);
-        }
-
         $subcategory = new Subcategory();
         $subcategory->catId= $request->catId;
-        $subcategory->slug =  Str::slug($request->subCatName);
+        $subcategory->slug = Str::slug($request->subCatName);
         $subcategory->subCatName= $request->subCatName;
         $subcategory->description= $request->description;
-        $subcategory->image= $imgCustomName;
         $subcategory->status= $request->status;
-        $subcategory->save();
+
+        
+            $image=$request->file('image');
+            $imgCustomName=time().'.'.$image->getClientOriginalExtension();
+            $location=public_path('backend/subcategoryimages/'.$imgCustomName);
+            image::make($image)->save($location);
+            $subcategory->image=$imgCustomName;
+            $subcategory->save();
+            return redirect()->route('subcategory.manage');
         //dd($subcategory);
 
     }
@@ -107,8 +110,13 @@ class SubcategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        $subcat=Subcategory::find($id);
+        if(File::exists('backend/subcategoryimages/'.$subcat->image)){
+            File::delete('backend/subcategoryimages/'.$subcat->image);
+        }
+        $subcat->delete();
+        return redirect()->route('subcategory.manage');
     }
 }
