@@ -12,41 +12,61 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
+    return view('welcome');
+});
+
+
+
+Route::get('/admin', function () {
     return view('backend.dashboard');
-});
-
-Route::get('/dashboard', function () {
-    return view('backend.dashboard');
-})->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 
-// FOr Product
-Route::group(['prefix'=>'/product'], function (){
-  Route::post('/store','App\Http\Controllers\Backend\ProductController@store')->name('store');
+Route::group(['prefix'=>'/admin'], function (){
+    // FOr Product
+       Route::group(['prefix'=>'/product'], function (){
+         Route::post('/store','App\Http\Controllers\Backend\ProductController@store')->middleware(['auth'])->name('store');
+    
+         Route::get('/create','App\Http\Controllers\Backend\ProductController@create')->middleware(['auth'])->name('create');
+    
+         Route::get('/manage','App\Http\Controllers\Backend\ProductController@index')->middleware(['auth'])->name('manage');
+    
+         Route::get('/edit/{id}','App\Http\Controllers\Backend\ProductController@edit')->middleware(['auth'])->name('edit');
+         Route::post('/update/{id}','App\Http\Controllers\Backend\ProductController@update')->middleware(['auth'])->name('update');
+          Route::get('/delete/{id}','App\Http\Controllers\Backend\ProductController@delete')->middleware(['auth'])->name('delete');
+     });
+    
+    // FOr Category
+     Route::group(['prefix'=>'/category'], function (){
+        Route::post('/catstore','App\Http\Controllers\Backend\CategoryController@store')->middleware(['auth'])->name('catstore');
+    
+         Route::get('/create','App\Http\Controllers\Backend\CategoryController@create')->middleware(['auth'])->name('catcreate');
+    
+         Route::get('/manage','App\Http\Controllers\Backend\CategoryController@index')->middleware(['auth'])->name('catmanage');
+    
+         Route::get('/catedit/{id}','App\Http\Controllers\Backend\CategoryController@edit')->middleware(['auth'])->name('catedit');
+         Route::get('/catshow','App\Http\Controllers\Backend\CategoryController@catshow')->middleware(['auth'])->name('catshow');
+    
+         Route::post('/update/{id}','App\Http\Controllers\Backend\CategoryController@update')->middleware(['auth'])->name('catupdate');
+         Route::get('/delete/{id}','App\Http\Controllers\Backend\CategoryController@delete')->middleware(['auth'])->name('catdelete');
+      });
 
-   Route::get('/create','App\Http\Controllers\Backend\ProductController@create')->name('create');
+       // FOr subCategory
+     Route::group(['prefix'=>'/subcategory'], function (){
+        Route::post('/subcatstore','App\Http\Controllers\Backend\SubcategoryController@store')->middleware(['auth'])->name('subcategory.store');
+    
+         Route::get('/subcreate','App\Http\Controllers\Backend\SubcategoryController@create')->middleware(['auth'])->name('subcategory.create');
+    
+         Route::get('/submanage','App\Http\Controllers\Backend\SubcategoryController@index')->middleware(['auth'])->name('subcategory.manage');
+    
+         Route::get('/subcatedit/{id}','App\Http\Controllers\Backend\SubcategoryController@edit')->middleware(['auth'])->name('subcategory.edit');
+         Route::get('/subcatshow','App\Http\Controllers\Backend\SubcategoryController@catshow')->middleware(['auth'])->name('subcategory.show');
+    
+         Route::post('/update/{id}','App\Http\Controllers\Backend\SubcategoryController@update')->middleware(['auth'])->name('subcategory.update');
+         Route::get('/delete/{id}','App\Http\Controllers\Backend\SubcategoryController@delete')->middleware(['auth'])->name('subcategory.delete');
+      });
 
-     Route::get('/manage','App\Http\Controllers\Backend\ProductController@index')->name('manage');
-
-     Route::get('/edit/{id}','App\Http\Controllers\Backend\ProductController@edit')->name('edit');
-     Route::post('/update/{id}','App\Http\Controllers\Backend\ProductController@update')->name('update');
-      Route::get('/delete/{id}','App\Http\Controllers\Backend\ProductController@delete')->name('delete');
-});
-
-// FOr Category
-Route::group(['prefix'=>'/category'], function (){
-  Route::post('/catstore','App\Http\Controllers\Backend\CategoryController@store')->name('catstore');
-
-   Route::get('/create','App\Http\Controllers\Backend\CategoryController@create')->name('catcreate');
-
-     Route::get('/manage','App\Http\Controllers\Backend\CategoryController@index')->name('catmanage');
-
-     Route::get('/catedit/{id}','App\Http\Controllers\Backend\CategoryController@edit')->name('catedit');
-     Route::get('/catshow','App\Http\Controllers\Backend\CategoryController@catshow')->name('catshow');
-
-     Route::post('/update/{id}','App\Http\Controllers\Backend\CategoryController@update')->name('catupdate');
-      Route::get('/delete/{id}','App\Http\Controllers\Backend\CategoryController@delete')->name('catdelete');
-});
-
-
+    });
+require __DIR__.'/auth.php';
