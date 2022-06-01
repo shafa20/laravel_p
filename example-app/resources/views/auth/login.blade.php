@@ -58,6 +58,9 @@
     </div>
 </form>
           <div class="mg-t-10 tx-center">Not yet a member? <a href="{{ route('register') }}" class="tx-info">Sign Up</a></div>
+          <a class=" btn btn-success m-1 btn-sm" href="{{ Route('gotogoogle') }}"><i class="fab fa-google"></i> Login with google</a>
+          <a class=" btn btn-success m-1 btn-sm" href=""><i class="fab fa-facebook"></i> Login with facebook</a>
+          <a class=" btn btn-success m-1 btn-sm" href=""><i class="fab fa-linkedin"></i> Login with linkedin</a>
         </div><!-- login-wrapper -->
       </div><!-- overlay-body -->
     </div><!-- d-flex -->

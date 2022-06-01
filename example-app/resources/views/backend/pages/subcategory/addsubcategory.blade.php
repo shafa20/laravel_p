@@ -73,13 +73,10 @@
                 <option value="1">active</option>
                 <option value="2">inactive</option>    
                   </select>
-
              </div>
-
               <div class="form-group"> 
                 <button type="submit" class=" form-control btn btn-info">Add Sub-Category</button>
               </div>
-
             </div>
           </div>
           </form>

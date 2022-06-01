@@ -33,7 +33,7 @@
                    
                     <tr>
                       <td>{{ $Sl}}</td>
-                      <td>{{ $data->catId}}</td>
+                      <td>{{ $data->category->name}}</td>
                       <td>{{ $data->subCatName}}</td>
                       <td>{{ $data->description}}</td>
                       <td><img height="80" src="{{ asset('backend/subcategoryimages/'.$data->image)}}" alt=""></td>
@@ -46,7 +46,7 @@
                         @endif
                       </td>
                       <td>
-                        <a href="{{ Route('edit',$data->id)}}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="{{ Route('subcategory.edit',$data->id)}}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
                         <button class="btn btn-sm btn-danger"><i class="fa fa-trash" data-toggle="modal" data-target="#delete{{ $data->id }}" ></i></button>
                       </td>
                     </tr>

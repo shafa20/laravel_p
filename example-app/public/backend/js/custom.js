@@ -94,4 +94,8 @@ jQuery(document).ready(function(){
            
        
       });
+
+      
+         // $('#product_description').summernote();
+      
 });

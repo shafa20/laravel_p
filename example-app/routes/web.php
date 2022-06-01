@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\Allshow;
+use App\Http\Controllers\SocialLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,11 +14,30 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// -------------------
+// for frontend
+// ------------------
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/gotogoogle',[SocialLogin::class,'gotogoogle'])->name('gotogoogle');
+Route::get('/google/login',[SocialLogin::class,'googleinfostore']);
+
+Route::get('/',[Allshow::class, 'showcategory']);
+Route::get('/products/{id}',[Allshow::class,'productfunction'])->name('cat');
+
+
+// Route::get('/login', function () {
+//     return view('frontend.home');
+// });
+// Route::get('/', function () {
+//    return view('frontend.home');
+// });
+
+// -------------------
+// for backend
+// ------------------
+Route::get('/check',function(){
+   return view('backend/apicheck');
 });
-
 
 
 Route::get('/admin', function () {
@@ -67,6 +88,22 @@ Route::group(['prefix'=>'/admin'], function (){
          Route::post('/update/{id}','App\Http\Controllers\Backend\SubcategoryController@update')->middleware(['auth'])->name('subcategory.update');
          Route::get('/delete/{id}','App\Http\Controllers\Backend\SubcategoryController@delete')->middleware(['auth'])->name('subcategory.delete');
       });
+
+        // FOr Items
+     Route::group(['prefix'=>'/items'], function (){
+      Route::post('/store','App\Http\Controllers\Backend\ItemsController@store')->middleware(['auth'])->name('items.store');
+  
+       Route::get('/create','App\Http\Controllers\Backend\ItemsController@create')->middleware(['auth'])->name('items.create');
+  
+       Route::get('/manage','App\Http\Controllers\Backend\ItemsController@index')->middleware(['auth'])->name('items.manage');
+  
+       Route::get('/edit/{id}','App\Http\Controllers\Backend\ItemsController@edit')->middleware(['auth'])->name('items.edit');
+      // Route::get('/subcatshow','App\Http\Controllers\Backend\SubcategoryController@catshow')->middleware(['auth'])->name('subcategory.show');
+  
+       Route::post('/update/{id}','App\Http\Controllers\Backend\ItemsController@update')->middleware(['auth'])->name('items.update');
+       Route::get('/delete/{id}','App\Http\Controllers\Backend\ItemsController@delete')->middleware(['auth'])->name('items.delete');
+       Route::get('/gallerydelete/{id}','App\Http\Controllers\Backend\ItemsController@gallerydelete')->middleware(['auth'])->name('items.gallery.delete');
+    });
 
     });
 require __DIR__.'/auth.php';
